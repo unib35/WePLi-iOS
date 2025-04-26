@@ -7,15 +7,8 @@ let project = Project(
             name: "WePLi-iOS",
             destinations: .iOS,
             product: .app,
-            bundleId: "io.tuist.WePLi-iOS",
-            infoPlist: .extendingDefault(
-                with: [
-                    "UILaunchScreen": [
-                        "UIColorName": "",
-                        "UIImageName": "",
-                    ],
-                ]
-            ),
+            bundleId: "com.lee.wepli",
+            infoPlist: .default,
             sources: ["WePLi-iOS/Sources/**"],
             resources: ["WePLi-iOS/Resources/**"],
             dependencies: []
@@ -24,7 +17,7 @@ let project = Project(
             name: "WePLi-iOSTests",
             destinations: .iOS,
             product: .unitTests,
-            bundleId: "io.tuist.WePLi-iOSTests",
+            bundleId: "com.lee.wepli.tests",
             infoPlist: .default,
             sources: ["WePLi-iOS/Tests/**"],
             resources: [],
