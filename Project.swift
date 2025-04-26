@@ -2,6 +2,12 @@ import ProjectDescription
 
 let project = Project(
     name: "WePLi-iOS",
+    settings: .settings(
+        base: [
+            "SWIFT_VERSION": "5.0",
+            "IPHONEOS_DEPLOYMENT_TARGET": "16.0"
+        ]
+    ),
     targets: [
         .target(
             name: "WePLi-iOS",
