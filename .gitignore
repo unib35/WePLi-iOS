@@ -55,6 +55,8 @@ xcuserdata/
 # ===================================================================
 .build/
 .swiftpm/
+.package.resolved
+**/*.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
 
 # ===================================================================
