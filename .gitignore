@@ -1,46 +1,46 @@
-### macOS ###
-# General
+# ===================================================================
+# macOS & System Files
+# macOS 시스템 및 네트워크 드라이브에서 자동 생성되는 파일들
+# ===================================================================
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Icon must end with two
-Icon
-
-# Thumbnails
+Icon?
 ._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
 .Spotlight-V100
-.TemporaryItems
 .Trashes
+.fseventsd
+.DocumentRevisions-V100
+.TemporaryItems
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
-# Directories potentially created on remote AFP share
+# 원격 AFP 공유에서 생성될 수 있는 디렉토리
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
 
-### Xcode ###
+
+# ===================================================================
 # Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
-
-## User settings
-xcuserdata/
-
-## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
-*.xcscmblueprint
-*.xccheckout
-
-## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
-build/
+# 빌드 결과물, 사용자 설정 등 Xcode 관련 파일들
+# ===================================================================
+# 빌드 결과물
 DerivedData/
+build/
+*.hmap
+*.ipa
+*.dSYM/
+*.gcno
+
+# Xcode 사용자 설정 (팀원과 공유하지 않음)
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# 레거시 Xcode (Xcode 3 및 이전 버전)
 *.moved-aside
 *.pbxuser
 !default.pbxuser
@@ -51,20 +51,26 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 
-### Xcode Patch ###
-*.xcodeproj/*
-!*.xcodeproj/project.pbxproj
-!*.xcodeproj/xcshareddata/
-!*.xcworkspace/contents.xcworkspacedata
-/*.gcno
 
-### Projects ###
+# ===================================================================
+# Swift Package Manager (SPM)
+# ===================================================================
+.build/
+.swiftpm/
+
+
+# ===================================================================
+# Tuist
+# Tuist로 생성되거나 관리되는 파일들
+# ===================================================================
+# Tuist로 생성되는 프로젝트 파일 (가장 중요)
+# 이 파일들은 'tuist generate' 명령어로 매번 새로 생성되므로 Git에서 추적하지 않습니다.
 *.xcodeproj
 *.xcworkspace
 
-### Tuist derived files ###
+# Tuist 캐시 및 빌드 파일
+Tuist/.build/
+
+# Tuist가 생성하는 기타 파일
 graph.dot
 Derived/
-
-### Tuist managed dependencies ###
-Tuist/.build
