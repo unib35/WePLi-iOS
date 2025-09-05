@@ -68,6 +68,15 @@ xcuserdata/
 *.xcworkspace
 
 # Tuist 캐시 및 빌드 파일
+Tuist/Dependencies/.build/
+Tuist/Dependencies/DerivedData/
+Tuist/Cache
+
+# Tuist가 생성하는 기타 파일
+graph.dot
+Derived/
+
+# Tuist 캐시 및 빌드 파일
 Tuist/.build/
 
 # Tuist가 생성하는 기타 파일
