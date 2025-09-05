@@ -1,6 +1,5 @@
 import ProjectDescription
 
-/// Tuist 4.x 버전에 호환되는 최종 프로젝트 템플릿 헬퍼입니다.
 public extension Project {
     static func makeModule(
         name: String,
@@ -40,7 +39,15 @@ public extension Project {
                 .pre(
                     path: .relativeToRoot("Scripts/swiftlint.sh"),
                     name: "SwiftLint",
-                    basedOnDependencyAnalysis: false
+                    inputPaths: [
+                        // 소스 코드 파일들이 변경될 때만 스크립트를 실행하도록 지정합니다.
+                        "Sources/**"
+                    ],
+                    outputPaths: [
+                        // Xcode가 이 파일을 기준으로 스크립트 재실행 여부를 결정합니다.
+                        "$(DERIVED_FILES_DIR)/SwiftLint.done"
+                    ],
+                    basedOnDependencyAnalysis: true
                 )
             ],
             dependencies: dependencies,
@@ -63,7 +70,6 @@ public extension Project {
         let demoTarget: Target = .target(
             name: "\(name)Demo",
             destinations: destinations,
-            // 👇 product 와 productName 의 순서를 바로잡았습니다.
             product: .app,
             productName: "\(name)Demo",
             bundleId: "\(organizationName).\(name)Demo",
