@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 5.9
 import PackageDescription
 
 #if TUIST
@@ -14,9 +14,15 @@ import PackageDescription
 
 let package = Package(
     name: "WePLi-iOS",
+    products: [
+        .library(name: "ProjectDescriptionHelpers", targets: ["ProjectDescriptionHelpers"]),
+    ],
     dependencies: [
         // Add your own dependencies here:
         // .package(url: "https://github.com/Alamofire/Alamofire", from: "5.0.0"),
         // You can read more about dependencies here: https://docs.tuist.io/documentation/tuist/dependencies
+    ],
+    targets: [
+        .target(name: "ProjectDescriptionHelpers", path: "ProjectDescriptionHelpers")
     ]
 )
