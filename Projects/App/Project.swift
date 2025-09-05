@@ -1,9 +1,12 @@
 import ProjectDescription
-import ProjectDescriptionHelpers
 
 let project = Project(
     name: "WePLi",
     organizationName: "com.wepli",
+    packages: [
+        .remote(url: "https://github.com/pointfreeco/swift-composable-architecture", requirement: .upToNextMajor(from: "1.10.2")),
+        .remote(url: "https://github.com/google/GoogleSignIn-iOS", requirement: .upToNextMajor(from: "7.1.0"))
+    ],
     settings: Settings.settings(
         base: [:],
         configurations: [
@@ -13,22 +16,17 @@ let project = Project(
         ]
     ),
     targets: [
-        Target(
+        .target(
             name: "WePLi",
-            platform: .iOS,
+            destinations: .iOS,
             product: .app,
             bundleId: "com.wepli.app",
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            deploymentTargets: .iOS("16.0"),
             infoPlist: .extendingDefault(with: [
-                "UILaunchScreen": [:],
+                "UILaunchStoryboardName": "LaunchScreen",
                 "CFBundleDisplayName": "WePLi",
-                "UIApplicationSceneManifest": [
-                    "UIApplicationSupportsMultipleScenes": true,
-                    "UISceneConfigurations": [:]
-                ],
                 "UIUserInterfaceStyle": "Light",
                 "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
-                "UIRequiresFullScreen": true
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
@@ -45,37 +43,37 @@ let project = Project(
                 .project(target: "WePLiCore", path: "../Core/WePLiCore"),
                 .project(target: "WePLiKit", path: "../Core/WePLiKit"),
                 .project(target: "WePLiResource", path: "../Core/WePLiResource"),
-                
+
                 // Feature Modules
                 .project(target: "WePLiAuth", path: "../Features/WePLiAuth"),
                 .project(target: "WePLiCommunity", path: "../Features/WePLiCommunity"),
                 .project(target: "WePLiVoting", path: "../Features/WePLiVoting"),
                 .project(target: "WePLiMyPage", path: "../Features/WePLiMyPage"),
                 .project(target: "WePLiSearch", path: "../Features/WePLiSearch"),
-                
-                // External Dependencies (TCA)
-                .external(name: "ComposableArchitecture"),
-                .external(name: "GoogleSignIn")
+
+                // External Dependencies
+                .package(product: "ComposableArchitecture"),
+                .package(product: "GoogleSignIn")
             ]
         ),
-        Target(
+        .target(
             name: "WePLiTests",
-            platform: .iOS,
+            destinations: .iOS,
             product: .unitTests,
             bundleId: "com.wepli.app.tests",
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            deploymentTargets: .iOS("16.0"),
             infoPlist: .default,
             sources: ["Tests/**"],
             dependencies: [
                 .target(name: "WePLi")
             ]
         ),
-        Target(
+        .target(
             name: "WePLiUITests",
-            platform: .iOS,
+            destinations: .iOS,
             product: .uiTests,
             bundleId: "com.wepli.app.uitests",
-            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            deploymentTargets: .iOS("16.0"),
             infoPlist: .default,
             sources: ["UITests/**"],
             dependencies: [
