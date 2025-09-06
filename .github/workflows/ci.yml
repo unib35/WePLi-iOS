@@ -1,40 +1,87 @@
-# 워크플로우의 이름
 name: WePLi CI
 
-# 워크플로우가 실행될 조건
 on:
-  push:
-    branches: [ "main", "develop" ] # main 또는 develop 브랜치에 push 될 때
   pull_request:
-    branches: [ "main", "develop" ] # main 또는 develop 브랜치로 PR이 생성될 때
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/CONTRIBUTING.md'
+      - '.github/dependabot.yml'
+      - '.github/CODEOWNERS'
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/CONTRIBUTING.md'
+      - '.github/dependabot.yml'
+      - '.github/CODEOWNERS'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build-and-test:
-    # 작업이 실행될 환경 (최신 macOS)
-    runs-on: macos-latest
-
+  lint:
+    name: "Run SwiftLint"
+    runs-on: macos-14
     steps:
-      # 1. 레포지토리 코드 가져오기
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2. Tuist 설치 및 캐싱
-      - name: Setup Tuist
-        uses: tuist/tuist-action@v5
+      - name: Install SwiftLint
+        run: brew install swiftlint || true
 
-      # 3. SPM 의존성 설치
-      - name: Install Dependencies
+      - name: Run SwiftLint
+        run: swiftlint --quiet
+
+  build-test:
+    name: "Build & Unit Test"
+    needs: lint
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.4'
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ~/Library/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Tuist/Dependencies.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Cache Tuist Dependencies
+        uses: actions/cache@v4
+        with:
+          path: Tuist/Dependencies
+          key: ${{ runner.os }}-tuist-${{ hashFiles('**/Tuist/Dependencies.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-tuist-
+
+      - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
+      - name: Tuist Install (Resolve SPM)
         run: tuist install
-
-      # 4. Xcode 프로젝트 생성
-      - name: Generate Xcode project
+      - name: Tuist Generate
         run: tuist generate
 
-      # 5. Xcode 빌드 및 테스트 실행
       - name: Build and Test
         run: |
-          xcodebuild clean build test \
-            -workspace WePLi.xcworkspace \
-            -scheme WePLi \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
-            -skipMacroValidation
+          # TCA 등 매크로 라이브러리 사용 시 발생하는 승인 팝업을 CI 환경에서 우회.
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+
+          xcodebuild -workspace WePLi.workspace -scheme WePLi \
+            -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
+            -skipMacroValidation YES \
+            -enableCodeCoverage YES \
+            clean test
+
