@@ -1,0 +1,40 @@
+# 워크플로우의 이름
+name: WePLi CI
+
+# 워크플로우가 실행될 조건
+on:
+  push:
+    branches: [ "main", "develop" ] # main 또는 develop 브랜치에 push 될 때
+  pull_request:
+    branches: [ "main", "develop" ] # main 또는 develop 브랜치로 PR이 생성될 때
+
+jobs:
+  build-and-test:
+    # 작업이 실행될 환경 (최신 macOS)
+    runs-on: macos-latest
+
+    steps:
+      # 1. 레포지토리 코드 가져오기
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Tuist 설치 및 캐싱
+      - name: Setup Tuist
+        uses: tuist/tuist-action@v5
+
+      # 3. SPM 의존성 설치
+      - name: Install Dependencies
+        run: tuist install
+
+      # 4. Xcode 프로젝트 생성
+      - name: Generate Xcode project
+        run: tuist generate
+
+      # 5. Xcode 빌드 및 테스트 실행
+      - name: Build and Test
+        run: |
+          xcodebuild clean build test \
+            -workspace WePLi.xcworkspace \
+            -scheme WePLi \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -skipMacroValidation
