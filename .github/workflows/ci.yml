@@ -1,0 +1,87 @@
+name: WePLi CI
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/CONTRIBUTING.md'
+      - '.github/dependabot.yml'
+      - '.github/CODEOWNERS'
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/pull_request_template.md'
+      - '.github/CONTRIBUTING.md'
+      - '.github/dependabot.yml'
+      - '.github/CODEOWNERS'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: "Run SwiftLint"
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SwiftLint
+        run: brew install swiftlint || true
+
+      - name: Run SwiftLint
+        run: swiftlint --quiet
+
+  build-test:
+    name: "Build & Unit Test"
+    needs: lint
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.4'
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ~/Library/org.swift.swiftpm
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Tuist/Dependencies.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Cache Tuist Dependencies
+        uses: actions/cache@v4
+        with:
+          path: Tuist/Dependencies
+          key: ${{ runner.os }}-tuist-${{ hashFiles('**/Tuist/Dependencies.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-tuist-
+
+      - name: Install Tuist
+        run: curl -Ls https://install.tuist.io | bash
+      - name: Tuist Install (Resolve SPM)
+        run: tuist install
+      - name: Tuist Generate
+        run: tuist generate
+
+      - name: Build and Test
+        run: |
+          # TCA 등 매크로 라이브러리 사용 시 발생하는 승인 팝업을 CI 환경에서 우회.
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+
+          xcodebuild -workspace WePLi.workspace -scheme WePLi \
+            -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
+            -skipMacroValidation YES \
+            -enableCodeCoverage YES \
+            clean test
+
