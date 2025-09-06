@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main, develop ]
     paths-ignore:
-      - '**.md'
+      - '**/*.md'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
       - '.github/CONTRIBUTING.md'
@@ -13,38 +13,68 @@ on:
   push:
     branches: [ main ]
     paths-ignore:
-      - '**.md'
+      - '**/*.md'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/pull_request_template.md'
       - '.github/CONTRIBUTING.md'
       - '.github/dependabot.yml'
       - '.github/CODEOWNERS'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: macos-14
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      lint: ${{ steps.filter.outputs.lint }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - '**/*.swift'
+              - 'Projects/**'
+              - 'Tuist/**'
+              - 'Configs/**'
+              - 'Scripts/**'
+              - 'Package.resolved'
+              - 'Tuist/Dependencies.lock'
+              - '**/*.xcodeproj'
+              - '**/*.xcworkspace'
+            lint:
+              - '**/*.swift'
+              - '.swiftlint.yml'
+              - 'Scripts/swiftlint.sh'
+
+  # SwiftLint
   lint:
-    name: "Run SwiftLint"
+    name: Run SwiftLint
+    needs: changes
+    if: ${{ needs.changes.outputs.lint == 'true' }}
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
-
       - name: Install SwiftLint
-        run: brew install swiftlint || true
+        run: brew install swiftlint
+      - name: SwiftLint
+        run: swiftlint --reporter github-actions-logging
 
-      - name: Run SwiftLint
-        run: swiftlint --quiet
-
+  # Build & Test
   build-test:
-    name: "Build & Unit Test"
-    needs: lint
+    name: Build & Unit Test
+    needs: [changes, lint]
+    if: ${{ needs.changes.outputs.code == 'true' }}
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
-
-      - name: Select Xcode Version
+      - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '15.4'
@@ -53,35 +83,69 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ~/Library/Developer/Xcode/DerivedData
-            ~/Library/org.swift.swiftpm
-          key: ${{ runner.os }}-spm-${{ hashFiles('**/Tuist/Dependencies.lock') }}
+            ~/Library/Developer/Xcode/DerivedData/SourcePackages
+            ~/.swiftpm
+          key: macOS-spm-${{ hashFiles('**/Package.resolved', 'Tuist/Package.resolved', 'Tuist/Dependencies.lock') }}
           restore-keys: |
-            ${{ runner.os }}-spm-
+            macOS-spm-
 
       - name: Cache Tuist Dependencies
         uses: actions/cache@v4
         with:
           path: Tuist/Dependencies
-          key: ${{ runner.os }}-tuist-${{ hashFiles('**/Tuist/Dependencies.lock') }}
+          key: macOS-tuist-${{ hashFiles('Tuist/Dependencies.lock') }}
           restore-keys: |
-            ${{ runner.os }}-tuist-
+            macOS-tuist-
 
       - name: Install Tuist
-        run: curl -Ls https://install.tuist.io | bash
-      - name: Tuist Install (Resolve SPM)
-        run: tuist install
-      - name: Tuist Generate
-        run: tuist generate
-
-      - name: Build and Test
         run: |
-          # TCA 등 매크로 라이브러리 사용 시 발생하는 승인 팝업을 CI 환경에서 우회.
-          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+          brew update
+          brew install tuist
+          tuist version
 
-          xcodebuild -workspace WePLi.workspace -scheme WePLi \
-            -destination 'platform=iOS Simulator,name=iPhone 15 Pro' \
-            -skipMacroValidation YES \
-            -enableCodeCoverage YES \
-            clean test
+      - name: Tuist Install
+        run: tuist install
 
+      - name: Tuist Generate
+        run: tuist generate --no-open
+
+      - name: Install xcbeautify
+        run: brew install xcbeautify
+
+      - name: Allow Macro Plugins
+        run: defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+
+      - name: Pick Simulator
+        id: pick-sim
+        shell: bash
+        run: |
+          set -e
+          sim_id=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/{print $2; exit}')
+          if [ -z "$sim_id" ]; then
+            echo "No available iPhone simulator found"; exit 1
+          fi
+          echo "SIM_ID=$sim_id" >> $GITHUB_OUTPUT
+          xcrun simctl boot "$sim_id" || true
+
+      # Build
+      - name: Build
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild -workspace WePLi.xcworkspace \
+                     -scheme WePLi \
+                     -destination "id=${{ steps.pick-sim.outputs.SIM_ID }}" \
+                     -configuration Debug \
+                     build | xcbeautify
+
+      # Test
+      - name: Test
+        shell: bash
+        run: |
+          set -o pipefail
+          xcodebuild -workspace WePLi.xcworkspace \
+                     -scheme WePLi \
+                     -destination "id=${{ steps.pick-sim.outputs.SIM_ID }}" \
+                     -configuration Debug \
+                     -enableCodeCoverage YES \
+                     test | xcbeautify
