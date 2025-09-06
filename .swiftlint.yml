@@ -1,5 +1,3 @@
-swiftlint_version: 0.55.1
-
 reporter: xcode
 
 included:
@@ -42,6 +40,9 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - vertical_parameter_alignment_on_call
   - yoda_condition
+  - force_cast
+  - force_try
+  - force_unwrapping
 
 line_length:
   warning: 120
