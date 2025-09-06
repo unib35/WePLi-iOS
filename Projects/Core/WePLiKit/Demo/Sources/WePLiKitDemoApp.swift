@@ -1,10 +1,10 @@
 import SwiftUI
 
 @main
-struct WePLiIOSApp: App {
+struct WePLiKitDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Text("WePLiKit Demo")
         }
     }
 }
