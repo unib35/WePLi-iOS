@@ -1,4 +1,5 @@
-swiftlint_version: 0.55.1
+# 1. CI 환경에 설치된 버전에 맞게 버전을 통일합니다.
+swiftlint_version: 0.59.1
 
 reporter: xcode
 
@@ -42,6 +43,9 @@ opt_in_rules:
   - unneeded_parentheses_in_closure_argument
   - vertical_parameter_alignment_on_call
   - yoda_condition
+  - force_cast
+  - force_try
+  - force_unwrapping
 
 line_length:
   warning: 120
