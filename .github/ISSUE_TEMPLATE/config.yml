@@ -6,5 +6,5 @@ blank_issues_enabled: false
 contact_links:
   - name: "🤔 질문 및 토론 (Questions & Discussion)"
     # 👇 이 URL을 실제 WePLi 프로젝트의 GitHub Discussions URL로 변경해주세요.
-    url: https://github.com/lee-jae-weon/WePLi-iOS/discussions
+    url: https://github.com/unib35/WePLi-iOS/discussions
     about: "프로젝트에 대한 간단한 질문이나 새로운 아이디어 제안, 자유로운 토론은 여기서 해주세요."

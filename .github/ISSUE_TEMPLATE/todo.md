@@ -1,9 +1,11 @@
+---
 name: "✅ To-Do (작업)"
 about: 새로운 작업을 등록합니다.
 title: "[Prefix] 이슈 제목"
 labels: "todo"
 assignees: ''
 
+---
 <!--
 
 Prefix
