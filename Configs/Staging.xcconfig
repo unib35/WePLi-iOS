@@ -1,3 +1,7 @@
 PRODUCT_BUNDLE_IDENTIFIER = com.lee.wepli.staging
 MARKETING_VERSION = 1.0.0
 CURRENT_PROJECT_VERSION = 1
+GOOGLE_CLIENT_ID = com.googleusercontent.apps.스테이징클라이언트ID
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.스테이징클라이언트ID
+SUPABASE_URL = https://YOUR_STG_PROJECT_ID.supabase.co
+SUPABASE_ANON_KEY = stg_anon_key
