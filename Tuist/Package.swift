@@ -5,24 +5,25 @@ import PackageDescription
     import struct ProjectDescription.PackageSettings
 
     let packageSettings = PackageSettings(
-        // Customize the product types for specific package product
-        // Default is .staticFramework
-        // productTypes: ["Alamofire": .framework,]
-        productTypes: [:]
+        productTypes: [
+            "ComposableArchitecture": .framework,
+            "Kingfisher": .framework,
+            "Moya": .framework,
+            "GoogleSignIn": .framework,
+            "Supabase": .framework,
+            "Lottie": .framework
+        ]
     )
 #endif
 
 let package = Package(
     name: "WePLi-iOS",
-    products: [
-        .library(name: "ProjectDescriptionHelpers", targets: ["ProjectDescriptionHelpers"]),
-    ],
     dependencies: [
-        // Add your own dependencies here:
-        // .package(url: "https://github.com/Alamofire/Alamofire", from: "5.0.0"),
-        // You can read more about dependencies here: https://docs.tuist.io/documentation/tuist/dependencies
-    ],
-    targets: [
-        .target(name: "ProjectDescriptionHelpers", path: "ProjectDescriptionHelpers")
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.10.2"),
+        .package(url: "https://github.com/onevcat/Kingfisher", from: "7.11.0"),
+        .package(url: "https://github.com/Moya/Moya", from: "15.0.3"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.1.0"),
+        .package(url: "https://github.com/supabase-community/supabase-swift", from: "2.5.0"),
+        .package(url: "https://github.com/airbnb/lottie-ios", from: "4.4.1")
     ]
 )
