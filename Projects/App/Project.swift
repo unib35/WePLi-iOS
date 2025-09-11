@@ -3,16 +3,13 @@ import ProjectDescription
 let project = Project(
     name: "WePLi",
     organizationName: "com.wepli",
-    packages: [
-        .remote(url: "https://github.com/pointfreeco/swift-composable-architecture", requirement: .upToNextMajor(from: "1.10.2")),
-        .remote(url: "https://github.com/google/GoogleSignIn-iOS", requirement: .upToNextMajor(from: "7.1.0"))
-    ],
+    packages: [],
     settings: Settings.settings(
         base: [:],
         configurations: [
-            .debug(name: "Debug-Dev", xcconfig: "../../Configs/Dev.xcconfig"),
-            .debug(name: "Debug-Staging", xcconfig: "../../Configs/Staging.xcconfig"),
-            .release(name: "Release-Prod", xcconfig: "../../Configs/Prod.xcconfig")
+            .debug(name: "Debug-Dev", xcconfig: .relativeToRoot("Configs/Dev.xcconfig")),
+            .debug(name: "Debug-Staging", xcconfig: .relativeToRoot("Configs/Staging.xcconfig")),
+            .release(name: "Release-Prod", xcconfig: .relativeToRoot("Configs/Prod.xcconfig"))
         ]
     ),
     targets: [
@@ -27,13 +24,23 @@ let project = Project(
                 "CFBundleDisplayName": "WePLi",
                 "UIUserInterfaceStyle": "Light",
                 "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
+                "CFBundleURLTypes": [
+                    [
+                        "CFBundleURLSchemes": [
+                            "$(GOOGLE_REVERSED_CLIENT_ID)"
+                        ]
+                    ]
+                ],
+                "SUPABASE_URL": "$(SUPABASE_URL)",
+                "SUPABASE_ANON_KEY": "$(SUPABASE_ANON_KEY)",
+                "GOOGLE_CLIENT_ID": "$(GOOGLE_CLIENT_ID)"
             ]),
             sources: ["Sources/**"],
             resources: ["Resources/**"],
+            entitlements: .file(path: "App.entitlements"),
             scripts: [
                 .pre(
-                    path: "../../Scripts/swiftlint.sh",
-                    arguments: [],
+                    path: .relativeToRoot("Scripts/swiftlint.sh"),
                     name: "SwiftLint",
                     basedOnDependencyAnalysis: false
                 )
@@ -51,9 +58,9 @@ let project = Project(
                 .project(target: "WePLiMyPage", path: "../Features/WePLiMyPage"),
                 .project(target: "WePLiSearch", path: "../Features/WePLiSearch"),
 
-                // External Dependencies
-                .package(product: "ComposableArchitecture"),
-                .package(product: "GoogleSignIn")
+                .external(name: "ComposableArchitecture"),
+                .external(name: "GoogleSignIn"),
+                .external(name: "Supabase")
             ]
         ),
         .target(
