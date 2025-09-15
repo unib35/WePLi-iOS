@@ -1,0 +1,78 @@
+# ===========================================================
+# Line endings & text normalization
+# ===========================================================
+*               text=auto eol=lf
+
+# Source files (강제 LF)
+*.swift         text eol=lf
+*.m             text eol=lf
+*.mm            text eol=lf
+*.h             text eol=lf
+*.hpp           text eol=lf
+*.c             text eol=lf
+*.cc            text eol=lf
+*.cpp           text eol=lf
+*.swiftinterface text eol=lf
+*.metal         text eol=lf
+
+# Config / data
+*.json          text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+*.plist         text eol=lf
+*.strings       text eol=lf
+*.xcstrings     text eol=lf
+*.entitlements  text eol=lf
+*.xcconfig      text eol=lf
+*.md            text eol=lf
+*.txt           text eol=lf
+*.csv           text eol=lf
+*.gitignore     text eol=lf
+*.gitattributes text eol=lf
+.editorconfig   text eol=lf
+
+# Scripts / CI
+*.sh            text eol=lf
+*.bash          text eol=lf
+*.zsh           text eol=lf
+*.rb            text eol=lf
+*.py            text eol=lf
+*.java          text eol=lf
+*.gradle        text eol=lf
+*.xml           text eol=lf
+
+# ===========================================================
+# Binary files (no line ending conversion)
+# ===========================================================
+# Images
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.webp          binary
+*.heic          binary
+*.tiff          binary
+*.tif           binary
+*.pdf           binary
+*.svg           text eol=lf
+
+# Fonts
+*.ttf           binary
+*.otf           binary
+*.woff          binary
+*.woff2         binary
+
+# Archives / bundles
+*.zip           binary
+*.car           binary   # Asset catalog compiled archive
+*.xcarchive     binary
+*.xcframework   binary
+
+# Audio/Video
+*.mp3           binary
+*.aac           binary
+*.wav           binary
+*.caf           binary
+*.m4a           binary
+*.mp4           binary
+*.mov           binary
