@@ -1,0 +1,89 @@
+# ===================================================================
+# macOS & System Files
+# ===================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.DocumentRevisions-V100
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# AFP shares
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ===================================================================
+# Xcode
+# ===================================================================
+# Build outputs
+DerivedData/
+build/
+*.hmap
+*.ipa
+*.dSYM/
+*.gcno
+
+# User-specific
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# Legacy Xcode (<=3)
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# ===================================================================
+# Swift Package Manager (Tuist만 사용할 때)
+# ===================================================================
+.build/
+.swiftpm/
+# 루트 Package.resolved는 사용하지 않으므로 무시
+Package.resolved
+# (워크스페이스 내부 SPM lock도 혹시 생기면 무시)
+**/*.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+# ===================================================================
+# Tuist (generated artifacts)
+# ===================================================================
+# Generated projects/workspaces
+*.xcodeproj
+*.xcworkspace
+
+# Tuist dependency & cache/build dirs
+Tuist/Dependencies/.build/
+Tuist/Dependencies/DerivedData/
+Tuist/Cache/
+Tuist/.build/
+
+# Misc Tuist outputs
+graph.dot
+Derived/
+
+# ===================================================================
+# Optional tools/automation
+# ===================================================================
+# Fastlane
+fastlane/report.xml
+fastlane/test_output/
+
+# Misc
+.DS_Store
+
+.swiftlint_cache
+.cache/
