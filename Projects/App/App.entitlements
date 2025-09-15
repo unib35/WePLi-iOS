@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Sign in with Apple -->
+  <key>com.apple.developer.applesignin</key>
+  <array>
+    <string>Default</string>
+  </array>
+
+  <!-- (선택) Universal Links/Supabase OAuth Redirect에 'applinks:'를 쓰면 Associated Domains 필요
+  <key>com.apple.developer.associated-domains</key>
+  <array>
+    <string>applinks:YOUR-DOMAIN.example</string>
+  </array>
+  -->
+</dict>
+</plist>
