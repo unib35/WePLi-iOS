@@ -24,6 +24,7 @@ jobs:
       lint: ${{ steps.filter.outputs.lint }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -43,7 +44,7 @@ jobs:
               - '.swiftformat'
 
   lint:
-    name: "Lint (SwiftFormat & SwiftLint)"
+    name: Lint (SwiftFormat & SwiftLint)
     needs: changes
     runs-on: macos-14
     timeout-minutes: 15
@@ -51,30 +52,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install tools
+      - name: Detect Swift files
+        id: has_swift
         if: ${{ needs.changes.outputs.lint == 'true' }}
+        run: |
+          if git ls-files '*.swift' | grep -q .; then
+            echo "present=true" >> $GITHUB_OUTPUT
+          else
+            echo "present=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install tools
+        if: ${{ needs.changes.outputs.lint == 'true' && steps.has_swift.outputs.present == 'true' }}
         run: |
           brew update
           brew install swiftformat swiftlint
 
       - name: SwiftFormat (lint mode)
-        if: ${{ needs.changes.outputs.lint == 'true' }}
+        if: ${{ needs.changes.outputs.lint == 'true' && steps.has_swift.outputs.present == 'true' }}
         run: |
           echo "Running SwiftFormat in lint mode…"
           swiftformat --lint . --config .swiftformat
 
-      - name: SwiftLint (strict)
-        if: ${{ needs.changes.outputs.lint == 'true' }}
+      - name: SwiftLint (strict, no cache)
+        if: ${{ needs.changes.outputs.lint == 'true' && steps.has_swift.outputs.present == 'true' }}
         run: |
           echo "Running SwiftLint…"
-          swiftlint --strict --quiet --reporter github-actions-logging
+          swiftlint --strict --quiet --no-cache --reporter github-actions-logging
+
+      - name: Skip Lint (no Swift files)
+        if: ${{ needs.changes.outputs.lint == 'true' && steps.has_swift.outputs.present != 'true' }}
+        run: echo "No Swift files in repo yet. Skipping lint."
 
       - name: No lint changes
         if: ${{ needs.changes.outputs.lint != 'true' }}
         run: echo "No files requiring a lint check were changed. Skipping."
 
   build-test:
-    name: "Build & Unit Test"
+    name: Build & Unit Test
     needs: [changes, lint]
     if: ${{ always() }}
     runs-on: macos-14
@@ -129,7 +144,7 @@ jobs:
           mise install
           tuist --version
 
-      - name: Setup other tools
+      - name: Setup utilities
         if: ${{ needs.changes.outputs.code == 'true' }}
         run: |
           brew update
