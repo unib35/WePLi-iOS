@@ -1,0 +1,21 @@
+--swiftversion 6.0
+
+# 기본
+--indent 2
+--maxwidth 120
+--stripunusedargs closure-only
+--self insert
+--binarygrouping none
+--decimalgrouping none
+
+# 줄바꿈/랩
+--wraparguments before-first
+--wrapcollections before-first
+--wrapparameters before-first
+
+# 룰 on/off
+--enable blankLinesAroundMark, blankLinesBetweenScopes, trailingCommas
+--disable redundantSelf, sortedImports
+
+# 파일 제외(선택)
+--exclude Projects/**/Generated
