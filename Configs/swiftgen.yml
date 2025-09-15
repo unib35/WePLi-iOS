@@ -1,0 +1,26 @@
+# 입력/출력 루트
+input_dir: Projects/App/Resources
+output_dir: Projects/App/Generated
+
+# Strings
+# strings:
+#   inputs:
+#     - Base.lproj/Localizable.strings
+#   outputs:
+#     - templateName: structured-swift5
+#       output: Strings+Generated.swift
+
+# Assets
+# xcassets:
+#   inputs:
+#     - Assets.xcassets
+#   outputs:
+#     - templateName: swift5
+#       output: Assets+Generated.swift
+
+# colors:
+#   inputs:
+#     - Colors.json    # 또는 .yaml/.txt
+#   outputs:
+#     - templateName: swift5
+#       output: Colors+Generated.swift
