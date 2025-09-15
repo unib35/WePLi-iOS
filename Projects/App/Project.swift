@@ -41,7 +41,7 @@ let project = Project(
   targets: [
     .target(
       name: "WePLi",
-      destinations: .iOS,
+      destinations: [.iPhone],
       product: .app,
       bundleId: "com.example.wepli",
       deploymentTargets: .iOS("16.0"),
