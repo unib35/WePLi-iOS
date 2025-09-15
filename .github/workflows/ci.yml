@@ -112,7 +112,7 @@ jobs:
         if: ${{ needs.changes.outputs.code == 'true' }}
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.4'
+          xcode-version: '16.2'
 
       - name: Cache SPM
         if: ${{ needs.changes.outputs.code == 'true' }}
