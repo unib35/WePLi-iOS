@@ -1,0 +1,5 @@
+// === Debug ===
+API_BASE_URL = https://dev.api.wepli.example
+LOG_LEVEL = DEBUG
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+CODE_SIGN_STYLE = Automatic

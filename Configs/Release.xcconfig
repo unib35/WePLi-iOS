@@ -1,0 +1,5 @@
+// === Release ===
+API_BASE_URL = https://api.wepli.example
+LOG_LEVEL = ERROR
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = RELEASE
+CODE_SIGN_STYLE = Automatic
