@@ -1,0 +1,34 @@
+- name: dependencies
+  color: "0366d6"
+  description: "Dependency updates (Dependabot)"
+
+- name: github-actions
+  color: "6f42c1"
+  description: "GitHub Actions workflow updates"
+
+- name: bug
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: enhancement
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: chore
+  color: "ededed"
+  description: "Tasks, build, infra, configs"
+
+- name: documentation
+  color: "0075ca"
+  description: "Docs and comments"
+
+- name: test
+  color: "0e8a16"
+  description: "Tests and QA"
+
+# 필요 시 기존 기본 라벨 이름을 팀 규칙에 맞게 바꾸거나 삭제도 가능
+# - name: wontfix
+#   from_name: wontfix   # 기존 라벨명 변경
+#   color: "ffffff"
+#   description: "Will not be worked on"
+#   remove: true         # 제거
