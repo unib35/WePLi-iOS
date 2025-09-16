@@ -1,0 +1,43 @@
+// Configs/Sample.xcconfig
+// 레포에 커밋되는 "샘플" 파일입니다. 민감한 값은 여기에 넣지 마세요.
+
+// ──────────────────────────────
+// App 기본
+// ──────────────────────────────
+PRODUCT_BUNDLE_IDENTIFIER = com.example.wepli
+APP_DISPLAY_NAME = WePLi
+
+// ──────────────────────────────
+// 로깅/환경
+// ──────────────────────────────
+// DEBUG / INFO / WARN / ERROR 중 택1 (앱 내부에서 분기용)
+LOG_LEVEL = DEBUG
+
+// API 베이스 URL (예: https://api.example.com)
+API_BASE_URL = https://api.example.com
+
+// ──────────────────────────────
+// Supabase
+// ──────────────────────────────
+SUPABASE_URL = https://YOUR-PROJECT.supabase.co
+SUPABASE_ANON_KEY = REPLACE_WITH_YOUR_ANON_KEY
+
+// ──────────────────────────────
+// Sign-In
+// ──────────────────────────────
+// Google Client ID (정방향)
+GOOGLE_CLIENT_ID = 1234567890-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+// Google Reversed Client ID (URL Scheme에 사용)
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.1234567890-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+// ──────────────────────────────
+// Feature Flags (옵션)
+// ──────────────────────────────
+FEATURE_NEW_FEED = NO
+FEATURE_EXPERIMENTAL_UI = NO
+
+// ──────────────────────────────
+// 빌드 설정 보정(옵션)
+// ──────────────────────────────
+// 일부 Objective-C 심볼 의존 패키지(예: Google 계열) 사용시 필요할 수 있음
+OTHER_LDFLAGS = $(inherited) -ObjC

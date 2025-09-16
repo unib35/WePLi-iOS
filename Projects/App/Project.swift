@@ -52,7 +52,7 @@ let project = Project(
         "CFBundleURLTypes": [
           [
             "CFBundleURLName": "com.example.wepli",
-            "CFBundleURLSchemes": ["com.googleusercontent.apps.YOUR_REVERSED_CLIENT_ID"],
+            "CFBundleURLSchemes": ["$(GOOGLE_REVERSED_CLIENT_ID)"],
           ],
         ],
       ]),
