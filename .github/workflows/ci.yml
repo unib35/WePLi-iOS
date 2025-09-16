@@ -142,7 +142,7 @@ jobs:
         if: ${{ needs.changes.outputs.code == 'true' }}
         run: |
           mise install
-          tuist --version
+          tuist version
 
       - name: Setup utilities
         if: ${{ needs.changes.outputs.code == 'true' }}
