@@ -1,11 +1,9 @@
-- name: dependencies
-  color: "0366d6"
-  description: "Dependency updates (Dependabot)"
+# ===================================
+# WePLi iOS Project GitHub Labels
+# ===================================
 
-- name: github-actions
-  color: "6f42c1"
-  description: "GitHub Actions workflow updates"
-
+# 🔧 작업 유형 (Type)
+# -----------------------------------
 - name: bug
   color: "d73a4a"
   description: "Something isn't working"
@@ -13,10 +11,6 @@
 - name: enhancement
   color: "a2eeef"
   description: "New feature or request"
-
-- name: chore
-  color: "ededed"
-  description: "Tasks, build, infra, configs"
 
 - name: documentation
   color: "0075ca"
@@ -26,9 +20,232 @@
   color: "0e8a16"
   description: "Tests and QA"
 
-# 필요 시 기존 기본 라벨 이름을 팀 규칙에 맞게 바꾸거나 삭제도 가능
-# - name: wontfix
-#   from_name: wontfix   # 기존 라벨명 변경
-#   color: "ffffff"
-#   description: "Will not be worked on"
-#   remove: true         # 제거
+- name: chore
+  color: "ededed"
+  description: "Tasks, build, infra, configs"
+
+- name: refactor
+  color: "9c27b0"
+  description: "Code refactoring"
+
+- name: hotfix
+  color: "ff0000"
+  description: "Urgent fix for production"
+
+# 🎯 우선순위 (Priority)
+# -----------------------------------
+- name: "priority: critical"
+  color: "b60205"
+  description: "Critical priority - Must be fixed ASAP"
+
+- name: "priority: high"
+  color: "d93f0b"
+  description: "High priority"
+
+- name: "priority: medium"
+  color: "fbca04"
+  description: "Medium priority"
+
+- name: "priority: low"
+  color: "c2e0c6"
+  description: "Low priority"
+
+# 📊 상태 (Status)
+# -----------------------------------
+- name: "status: in progress"
+  color: "1d76db"
+  description: "Work in progress"
+
+- name: "status: review needed"
+  color: "f9d0c4"
+  description: "Needs code review"
+
+- name: "status: blocked"
+  color: "e11d21"
+  description: "Blocked by other issues or external factors"
+
+- name: "status: on hold"
+  color: "bfd4f2"
+  description: "On hold temporarily"
+
+- name: "status: ready for merge"
+  color: "0e8a16"
+  description: "Approved and ready to be merged"
+
+# 📦 모듈 (Module)
+# -----------------------------------
+- name: "module: WePLiKit"
+  color: "5319e7"
+  description: "Common UI components module"
+
+- name: "module: WePLiCore"
+  color: "b60205"
+  description: "Core business logic module"
+
+- name: "module: app"
+  color: "006b75"
+  description: "Main app module"
+
+# 🏗️ TCA 아키텍처 (Architecture)
+# -----------------------------------
+- name: "tca: state"
+  color: "84b6eb"
+  description: "TCA State related"
+
+- name: "tca: action"
+  color: "7057ff"
+  description: "TCA Action related"
+
+- name: "tca: reducer"
+  color: "008672"
+  description: "TCA Reducer related"
+
+- name: "tca: dependency"
+  color: "ffd33d"
+  description: "TCA Dependency injection"
+
+# 🎨 기능 영역 (Feature Area)
+# -----------------------------------
+- name: "area: auth"
+  color: "d4c5f9"
+  description: "Authentication & authorization"
+
+- name: "area: playlist"
+  color: "c5def5"
+  description: "Playlist related features"
+
+- name: "area: voting"
+  color: "bfdadc"
+  description: "Voting system features"
+
+- name: "area: ui/ux"
+  color: "f7c6c7"
+  description: "UI/UX improvements"
+
+- name: "area: network"
+  color: "fef2c0"
+  description: "Network & API related"
+
+- name: "area: database"
+  color: "e99695"
+  description: "Database & data persistence"
+
+# 📱 iOS 플랫폼 (Platform)
+# -----------------------------------
+- name: "ios: swiftui"
+  color: "fa7343"
+  description: "SwiftUI related"
+
+- name: "ios: performance"
+  color: "ff9800"
+  description: "Performance optimization"
+
+- name: "ios: memory"
+  color: "795548"
+  description: "Memory management issues"
+
+- name: "ios: accessibility"
+  color: "4caf50"
+  description: "Accessibility improvements"
+
+# 📱 기기/OS (Device/OS)
+# -----------------------------------
+- name: "device: iPhone"
+  color: "e7e7e7"
+  description: "iPhone specific issue"
+
+- name: "device: iPad"
+  color: "d3d3d3"
+  description: "iPad specific issue"
+
+- name: "os: iOS 17+"
+  color: "c0c0c0"
+  description: "iOS 17 or later specific"
+
+- name: "os: iOS 18+"
+  color: "a8a8a8"
+  description: "iOS 18 or later specific"
+
+# 🔨 빌드/배포 (Build/Deploy)
+# -----------------------------------
+- name: dependencies
+  color: "0366d6"
+  description: "Dependency updates (Dependabot)"
+
+- name: github-actions
+  color: "6f42c1"
+  description: "GitHub Actions workflow updates"
+
+- name: "build: tuist"
+  color: "3f51b5"
+  description: "Tuist configuration"
+
+- name: "build: spm"
+  color: "ff5722"
+  description: "Swift Package Manager"
+
+- name: "ci/cd"
+  color: "106ba3"
+  description: "Continuous Integration/Deployment"
+
+- name: release
+  color: "00bcd4"
+  description: "Release related"
+
+# 🛡️ 보안/기술부채 (Security/Tech Debt)
+# -----------------------------------
+- name: security
+  color: "ee0701"
+  description: "Security vulnerability or improvement"
+
+- name: privacy
+  color: "ff5722"
+  description: "Privacy related issues"
+
+- name: "tech debt"
+  color: "607d8b"
+  description: "Technical debt that needs addressing"
+
+- name: "breaking change"
+  color: "d73a4a"
+  description: "Breaking change that requires migration"
+
+# 🤝 협업 (Collaboration)
+# -----------------------------------
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+- name: question
+  color: "d876e3"
+  description: "Further information is requested"
+
+- name: discussion
+  color: "98d8c8"
+  description: "Needs discussion"
+
+- name: duplicate
+  color: "cfd3d7"
+  description: "This issue or pull request already exists"
+
+- name: invalid
+  color: "e4e669"
+  description: "This doesn't seem right"
+
+- name: wontfix
+  color: "ffffff"
+  description: "This will not be worked on"
+
+# 🔌 외부 연동 (External Integration)
+# -----------------------------------
+- name: "external: api"
+  color: "0052cc"
+  description: "External API integration"
+
+- name: "external: analytics"
+  color: "172b4d"
+  description: "Analytics service related"
