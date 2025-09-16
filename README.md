@@ -29,7 +29,7 @@
 
 1.  **레포지토리 클론**:
     ```bash
-    git clone [https://github.com/lee-jae-weon/WePLi-iOS.git](https://github.com/lee-jae-weon/WePLi-iOS.git)
+    git clone [https://github.com/unib35/WePLi-iOS.git](https://github.com/unib35/WePLi-iOS.git)
     cd WePLi-iOS
     ```
 
