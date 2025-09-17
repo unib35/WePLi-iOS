@@ -13,6 +13,7 @@ Icon?
 .TemporaryItems
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+*.swp
 
 # AFP shares
 .AppleDB
@@ -84,3 +85,10 @@ fastlane/test_output/
 # ===================================================================
 .vscode/
 .idea/
+
+
+# ===================================================================
+# Bundler & Ruby
+# ===================================================================
+.bundle/
+vendor/bundle/
