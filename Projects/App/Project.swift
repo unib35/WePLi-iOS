@@ -54,7 +54,6 @@ let project = Project(
       resources: ["Resources/**"],
       entitlements: .file(path: .relativeToManifest("App.entitlements")),
       scripts: [
-        // SwiftGen 제거
         swiftLintScript
       ],
       dependencies: [
