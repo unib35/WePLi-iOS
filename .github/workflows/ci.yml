@@ -114,7 +114,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Enforce Lint Success
-        if: ${{ needs.lint.result != 'success' }}
+        if: ${{ needs.changes.outputs.lint == 'true' && needs.lint.result == 'failure' }}
         run: |
           echo "Lint job failed. Aborting build and test."
           exit 1
