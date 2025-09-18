@@ -1,0 +1,11 @@
+input_dir: Projects/App/Resources
+output_dir: Projects/App/Generated
+
+# --- Asset catalogs (이미지/컬러 카탈로그 모두 지원) ---
+xcassets:
+  inputs:
+    - Assets.xcassets
+    - Colors.xcassets
+  outputs:
+    - templateName: swift5
+      output: Assets+Generated.swift
