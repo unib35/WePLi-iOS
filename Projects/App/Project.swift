@@ -2,30 +2,24 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 // --- Build Scripts ---
-let swiftGenScript: TargetScript = .pre(
-  script: #"""
-  if command -v swiftgen >/dev/null 2>&1; then
-    echo "Running SwiftGen…"
-    swiftgen config run --config "${SRCROOT}/Configs/swiftgen.yml"
-  else
-    echo "warning: SwiftGen not installed"
-  fi
-  """#,
-  name: "SwiftGen",
-  basedOnDependencyAnalysis: false
-)
-
 let swiftLintScript: TargetScript = .pre(
   script: #"""
+  set -euo pipefail
+  ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
   if command -v swiftlint >/dev/null 2>&1; then
     echo "Running SwiftLint (non-strict)…"
-    swiftlint --quiet --config "${SRCROOT}/.swiftlint.yml" || true
+    swiftlint --quiet --config "$ROOT/.swiftlint.yml" || true
   else
     echo "warning: SwiftLint not installed"
   fi
+
+  # 의존성 분석용 스탬프 생성
+  touch "${DERIVED_FILE_DIR}/SwiftLint.stamp"
   """#,
   name: "SwiftLint (non-strict)",
-  basedOnDependencyAnalysis: false
+  outputPaths: ["$(DERIVED_FILE_DIR)/SwiftLint.stamp"],
+  basedOnDependencyAnalysis: true
 )
 
 // --- Project ---
@@ -60,8 +54,8 @@ let project = Project(
       resources: ["Resources/**"],
       entitlements: .file(path: .relativeToManifest("App.entitlements")),
       scripts: [
-        swiftGenScript,
-        swiftLintScript,
+        // SwiftGen 제거
+        swiftLintScript
       ],
       dependencies: [
         .external(name: "Moya"),
