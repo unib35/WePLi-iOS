@@ -1,7 +1,7 @@
 import ProjectDescription
 
 let workspace = Workspace(
-  name: "WePLi-iOS",
+  name: "WePLi",
   projects: [
     "Projects/**",
   ]
