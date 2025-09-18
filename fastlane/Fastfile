@@ -1,23 +1,141 @@
+# Fastfile for WePLi (Tuist v4 + Xcode 15+)
 default_platform(:ios)
 
+# 레포 루트 절대경로
+REPO_ROOT = File.expand_path("..", __dir__)
+
+# ===== project constants (루트 기준 절대경로) =====
+WEPLI_WORKSPACE = File.join(REPO_ROOT, "WePLi.xcworkspace")   # 루트에 존재
+WEPLI_SCHEME    = "WePLi"                                      # 스킴 이름
+WEPLI_BUNDLE_ID = "com.example.wepli"                            # 실제 번들 아이디
+APPLE_TEAM_ID   = "AMNS6W2AA9"                                   # 10자리 팀 ID
+DERIVED_DIR     = File.join(REPO_ROOT, "fastlane/DerivedData")
+SWIFTGEN_CONFIG = File.join(REPO_ROOT, "swiftgen.yml")         # 루트의 swiftgen.yml
+
+# 공통 빌드 옵션
+def shared_build_settings
+  {
+    workspace: WEPLI_WORKSPACE,
+    scheme: WEPLI_SCHEME,
+    clean: true,
+    derived_data_path: DERIVED_DIR,
+    silent: false
+  }
+end
+
 platform :ios do
-  desc "Run unit tests on a simulator"
-  lane :test do
-    run_tests(
-      workspace: "WePLi.xcworkspace",
-      scheme: "WePLi",
-      clean: true,
-      code_coverage: true
-    )
+  before_all do
+    Dir.chdir(REPO_ROOT) do
+      # Tuist v4 의존성 설치 및 워크스페이스 생성
+      sh("tuist install")
+      sh("tuist generate --no-open")
+
+      # SwiftGen은 assets만 생성하도록 구성되어 있음
+      sh("swiftgen config lint --config #{SWIFTGEN_CONFIG}")
+      sh("swiftgen config run  --config #{SWIFTGEN_CONFIG}")
+    end
   end
 
-  desc "Archive (no upload) just to verify signing/payload"
-  lane :archive do
-    build_app(
-      workspace: "WePLi.xcworkspace",
-      scheme: "WePLi",
-      export_method: "development",
-      clean: true
+  desc "처음 개발 환경 부트스트랩"
+  lane :bootstrap do
+    Dir.chdir(REPO_ROOT) do
+      # 필요 시 bundler, pods 등 추가
+      UI.message("Bootstrap completed")
+    end
+  end
+
+  desc "Debug 빌드"
+  lane :build_debug do
+    Dir.chdir(REPO_ROOT) do
+      gym(shared_build_settings.merge(
+        configuration: "Debug",
+        destination: "generic/platform=iOS"
+      ))
+    end
+  end
+
+  desc "단위 테스트 실행"
+  lane :test do
+    Dir.chdir(REPO_ROOT) do
+      scan(
+        workspace: WEPLI_WORKSPACE,
+        scheme: WEPLI_SCHEME,
+        clean: true,
+        derived_data_path: DERIVED_DIR,
+        result_bundle: true
+      )
+    end
+  end
+
+  desc "App Store 제출용 아카이브"
+  lane :archive_release do
+    Dir.chdir(REPO_ROOT) do
+      gym(shared_build_settings.merge(
+        configuration: "Release",
+        export_method: "app-store",
+        destination: "generic/platform=iOS"
+      ))
+    end
+  end
+
+  # TestFlight 업로드는 API Key 방식 권장
+  # ASC_API_KEY_CONTENT: base64 인코딩된 p8 키 본문 (CI 시크릿)
+  desc "TestFlight 업로드 (API Key)"
+  lane :beta_api_key do
+    app_store_connect_api_key(
+      key_id:        "[KEY_ID]",
+      issuer_id:     "[ISSUER_ID]",
+      key_content:   ENV["ASC_API_KEY_CONTENT"],
+      is_key_content_base64: true
     )
+    archive_release
+    Dir.chdir(REPO_ROOT) do
+      pilot(
+        skip_submission: true,
+        distribute_external: false
+      )
+    end
+  end
+
+  # Apple ID 세션 방식 (필요할 때만)
+  desc "TestFlight 업로드 (Apple ID 세션)"
+  lane :beta_apple_id do
+    archive_release
+    Dir.chdir(REPO_ROOT) do
+      pilot(
+        apple_id: "[appleid@example.com]",
+        skip_submission: true,
+        distribute_external: false
+      )
+    end
+  end
+
+  desc "빌드번호 자동 증가"
+  lane :bump_build do
+    Dir.chdir(REPO_ROOT) do
+      increment_build_number(
+        build_number: latest_testflight_build_number(
+          app_identifier: WEPLI_BUNDLE_ID
+        ).to_i + 1
+      )
+      UI.message("Build number bumped")
+    end
+  end
+
+  desc "CI 파이프라인"
+  lane :ci do
+    bootstrap
+    test
+    archive_release
+  end
+
+  after_all do |lane|
+    UI.success("fastlane #{lane} finished")
+  end
+
+  error do |lane, exception|
+    UI.error("fastlane #{lane} failed")
+    UI.error(exception.message)
+    UI.user_error!("Build failed")
   end
 end
